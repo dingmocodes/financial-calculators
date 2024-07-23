@@ -7,28 +7,28 @@ min_percentage = Decimal(0.025)  # somewhere in the range of 0.01 - 0.04
 billing_cycle = Decimal(30)
 days_in_year = Decimal(365)  # could be 360
 
-balance = 0
-while balance <= 0:  # input 1
-    balance = Decimal(input('Enter a balance (£): '))
-old_balance = balance
+# balance = 0
+# while balance <= 0:  # input 1
+#     balance = Decimal(input('Enter a balance (£): '))
+# old_balance = balance
 
-min_payment = balance * min_percentage
+# min_payment = balance * min_percentage
 
-# lowest minimum payment can be is £5
-if min_payment < 5:
-    min_payment = Decimal(5)
+# # lowest minimum payment can be is £5
+# if min_payment < 5:
+#     min_payment = Decimal(5)
 
-interest = 0
-while interest <= 0:  # input 2
-    interest = Decimal(input('Enter your annual interest rate (%): '))
-interest *= Decimal(0.01)
+# interest = 0
+# while interest <= 0:  # input 2
+#     interest = Decimal(input('Enter your annual interest rate (%): '))
+# interest *= Decimal(0.01)
 
-# daily periodic rate
-dpr = interest / days_in_year
+# # daily periodic rate
+# dpr = interest / days_in_year
 
-payment = 0
-while payment < min_payment:  # input 3
-    payment = Decimal(input('Enter a monthly payment of £' + str(round(min_payment, 2)) + ' or higher: '))
+# payment = 0
+# while payment < min_payment:  # input 3
+#     payment = Decimal(input('Enter a monthly payment of £' + str(round(min_payment, 2)) + ' or higher: '))
 
 
 def calculate_repayment(balance: Decimal, interest: Decimal, payment: Decimal) -> dict:
@@ -36,6 +36,8 @@ def calculate_repayment(balance: Decimal, interest: Decimal, payment: Decimal) -
     total_cost = 0
     total_months = 0
     day_counter = 0
+    old_balance = balance
+    dpr = interest / days_in_year  # daily periodic rate
 
     while balance > 0:
         # check if a month has passed to pay
@@ -58,5 +60,3 @@ def calculate_repayment(balance: Decimal, interest: Decimal, payment: Decimal) -
     }
 
     return response
-
-print(calculate_repayment(balance, interest, payment))
