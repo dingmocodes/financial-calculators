@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, ValidationInfo
 from decimal import Decimal
 import calculators
 
@@ -8,15 +8,24 @@ class RepaymentInput(BaseModel):
         gt=0,
         description="Balance must be greater than zero"
     )
+    
     interest: Decimal = Field(
         ge=0,
         le=100,
         description="Interest must be between 0 and 100"
     )
-    payment: Decimal = Field(
-        ge=calculators.get_minpayment(balance),
-        description="The balance must be greater than " + str(calculators.get_minpayment(balance))
-    )
+
+    payment: Decimal
+    
+    @field_validator("payment")
+    @classmethod
+    def check_payment(cls, p: Decimal, info: ValidationInfo) -> Decimal:
+        balance = info.data['balance']
+        if balance is not None:
+            min_payment = calculators.get_minpayment(balance)
+            if p < min_payment:
+                raise ValueError('Payment must be greater than ' + str(min_payment))
+        return p
 
 class RepaymentOutput(BaseModel):
     total_interest_paid: Decimal
@@ -28,25 +37,36 @@ class BalanceTransferInput(BaseModel):
         gt=0,
         description="Balance must be greater than zero"
     )
+
     interest: Decimal = Field(
         ge=0,
         le=100,
         description="Interest must be between 0 and 100"
     )
-    payment: Decimal = Field(
-        ge=calculators.get_minpayment(balance),
-        description="The balance must be greater than " + str(calculators.get_minpayment(balance))
-    )
+
+    payment: Decimal
+
     transfer_fee: Decimal = Field(
         ge=0,
         le=100,
         description="Transfer fee must be between 0 and 100"
     )
+
     intro_period: Decimal = Field(
         ge=0,
         le=48,
         description="Intro period must be between 0 and 48"
     )
+
+    @field_validator("payment")
+    @classmethod
+    def check_payment(cls, p: Decimal, info: ValidationInfo) -> Decimal:
+        balance = info.data['balance']
+        if balance is not None:
+            min_payment = calculators.get_minpayment(balance)
+            if p < min_payment:
+                raise ValueError('Payment must be greater than ' + str(min_payment))
+        return p
 
 class BalanceTransferOutput(BaseModel):
     savings: Decimal
