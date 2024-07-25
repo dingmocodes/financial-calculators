@@ -5,14 +5,15 @@ min_percentage = Decimal(0.025)  # somewhere in the range of 0.01 - 0.04
 billing_cycle = Decimal(30)
 days_in_year = Decimal(365)  # could be 360
 
-def get_minpayment(balance: Decimal) -> Decimal:
-    result = Decimal(round(balance * min_percentage, 2))
+def get_minpayment(balance) -> Decimal:
+    result = Decimal(balance) * min_percentage
     if result < 5:
-        result = Decimal(5)
-    return result
+        result = 5
+    return Decimal(round(result, 2))
 
-def calculate_repayment(balance: Decimal, interest: Decimal, payment: Decimal) -> dict:
+def calculate_repayment(balance, interest, payment) -> dict:
 
+    interest *= Decimal(0.01)
     total_cost = 0
     total_months = 0
     day_counter = 0

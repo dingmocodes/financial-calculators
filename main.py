@@ -6,28 +6,29 @@ import calculators
 from fastapi.middleware.cors import CORSMiddleware
 
 class RepaymentInput(BaseModel):
-    balance: Decimal = Field(
+    balance: float = Field(
         gt=0,
         description="Balance must be greater than zero"
     )
-    
-    interest: Decimal = Field(
+    print('validated balance')
+    interest: float = Field(
         ge=0,
         le=100,
         description="Interest must be between 0 and 100"
     )
-
-    payment: Decimal
+    print('validated interest')
+    payment: float
     
     @field_validator("payment")
     @classmethod
-    def check_payment(cls, p: Decimal, info: ValidationInfo) -> Decimal:
+    def check_payment(cls, p: float, info: ValidationInfo) -> float:
         balance = info.data['balance']
         if balance is not None:
             min_payment = calculators.get_minpayment(balance)
             if p < min_payment:
                 raise ValueError('Payment must be greater than ' + str(min_payment))
         return p
+    print('validated payment')
 
 class RepaymentOutput(BaseModel):
     total_interest_paid: Decimal
@@ -65,7 +66,7 @@ class BalanceTransferInput(BaseModel):
     def check_payment(cls, p: Decimal, info: ValidationInfo) -> Decimal:
         balance = info.data['balance']
         if balance is not None:
-            min_payment = calculators.get_minpayment(balance)
+            min_payment = calculators.get_minpayment(Decimal(balance))
             if p < min_payment:
                 raise ValueError('Payment must be greater than ' + str(min_payment))
         return p
@@ -97,7 +98,9 @@ async def root():
 
 @app.post("/repayment", response_model=RepaymentOutput)
 async def get_repayment(input: RepaymentInput):
-    result = calculators.calculate_repayment(input.balance, input.interest, input.payment)
+    print('you abouta start calculations')
+    result = calculators.calculate_repayment(Decimal(input.balance), Decimal(input.interest), Decimal(input.payment))
+    print('you at least made it past the calculation')
     return RepaymentOutput(**result)
 
 @app.post("/balance-transfer", response_model=BalanceTransferOutput)

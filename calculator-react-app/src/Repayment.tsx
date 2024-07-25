@@ -10,9 +10,9 @@ type RepaymentResponse = {
 };
 
 type RepaymentState = {
-  balance: number,
-  interest: number,
-  payment: number,
+  balance: string,
+  interest: string,
+  payment: string,
   output: RepaymentResponse
 };
 
@@ -21,9 +21,9 @@ export class Repayment extends Component<RepaymentProps, RepaymentState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      balance: 0,
-      interest: 0,
-      payment: 0,
+      balance: '0',
+      interest: '0',
+      payment: '0',
       output: {
         total_interest_paid: 0,
         total_cost: 0,
@@ -56,24 +56,24 @@ export class Repayment extends Component<RepaymentProps, RepaymentState> {
 
   doBalanceChange = (evt: ChangeEvent<HTMLInputElement>): void => {
     // what if a user doesn't enter numbers
-    this.setState({ balance: evt.target.valueAsNumber });
+    this.setState({ balance: evt.target.value });
   };
 
   doInterestChange = (evt: ChangeEvent<HTMLInputElement>): void => {
     // what if a user doesn't enter numbers
-    this.setState({ interest: evt.target.valueAsNumber });
+    this.setState({ interest: evt.target.value });
   };
 
   doPaymentChange = (evt: ChangeEvent<HTMLInputElement>): void => {
     // what if a user doesn't enter numbers
-    this.setState({ payment: evt.target.valueAsNumber });
+    this.setState({ payment: evt.target.value });
   };
 
   doSubmitClick = (_evt: MouseEvent<HTMLButtonElement>): void => {
     const args = {
-      balance: this.state.balance.toString(),
-      interest: this.state.interest.toString(),
-      payment: this.state.payment.toString()
+      balance: Number(this.state.balance),
+      interest: Number(this.state.interest),
+      payment: Number(this.state.payment)
     }
     fetch("http://localhost:8000/repayment", {
     // fetch("/repayment", {
@@ -102,25 +102,19 @@ export class Repayment extends Component<RepaymentProps, RepaymentState> {
       return;
     }
 
-    if (typeof data.total_interest_paid !== 'number') {
-      console.error("bad data from /repayment: total_interest_paid is not a number", data);
-      return;
-    }
+    const totalInterestPaid = Number(data.total_interest_paid);
+    const totalCost = Number(data.total_cost);
+    const totalMonths = Number(data.total_months);
 
-    if (typeof data.total_cost !== 'number') {
-      console.error("bad data from /repayment: total_cost is not a number", data);
-      return;
-    }
-
-    if (typeof data.total_months !== 'number') {
-      console.error("bad data from /repayment: total_months is not a number", data);
+    if (isNaN(totalInterestPaid) || isNaN(totalCost) || isNaN(totalMonths)) {
+      console.error("bad data from /repayment: one of the fields is not a valid number", data);
       return;
     }
 
     this.setState({output: {
-      total_interest_paid: data.total_interest_paid,
-      total_cost: data.total_cost,
-      total_months: data.total_months
+      total_interest_paid: totalInterestPaid,
+      total_cost: totalCost,
+      total_months: totalMonths
     }})
   };
 
