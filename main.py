@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, field_validator, ValidationInfo
 from decimal import Decimal
+import uvicorn
 import calculators
+from fastapi.middleware.cors import CORSMiddleware
 
 class RepaymentInput(BaseModel):
     balance: Decimal = Field(
@@ -71,7 +73,27 @@ class BalanceTransferInput(BaseModel):
 class BalanceTransferOutput(BaseModel):
     savings: Decimal
 
+if __name__ == "__main__":
+    uvicorn.run("app.api:app", host="0.0.0.0", port=8000, reload=True)
+
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
+@app.get('/')
+async def root():
+    return {'root': 'Hello World'}
 
 @app.post("/repayment", response_model=RepaymentOutput)
 async def get_repayment(input: RepaymentInput):

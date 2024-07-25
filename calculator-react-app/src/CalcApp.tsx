@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { Repayment } from './Repayment'
-import { BalanceTransfer } from './BalanceTransfer'
-import './Main.css';
+import { Repayment } from './Repayment';
+// import { BalanceTransfer } from './BalanceTransfer'
+// import './Main.css';
 
 type Page = {kind: "home"} | {kind: "repayment"} | {kind: "bt"};
 
-type MainState = {
-  page: Page;
-}
+type CalcAppState = {
+  page: Page
+};
 
-export class Main extends Component<{}, MainState> {
+export class CalcApp extends Component<{}, CalcAppState> {
 
   constructor(props: {}) {
     super(props);
@@ -22,23 +22,24 @@ export class Main extends Component<{}, MainState> {
                 <h1>Calculators</h1>
                 <button onClick={this.doRepaymentClick}>Repayment</button>
                 <button onClick={this.doBTClick}>Balance transfer</button>
-              </div>)
+              </div>);
     }
     if (this.state.page.kind === "repayment") {
-      return <Repayment/>
+      return <Repayment/>;
     }
-    if (this.state.page.kind === "bt") {
-      return <BalanceTransfer/>
-    } else {
-      return <div></div>
+    // if (this.state.page.kind === "bt") {
+    //   return <BalanceTransfer/>
+    // } 
+    else {
+      return <div></div>;
     }
-  }
+  };
 
   doRepaymentClick = (): void => {
-    this.setState({page: {kind: "repayment"}})
-  }
+    this.setState({page: {kind: "repayment"}});
+  };
 
   doBTClick = (): void => {
-    this.setState({page: {kind: "bt"}})
-  }
+    this.setState({page: {kind: "bt"}});
+  };
 }

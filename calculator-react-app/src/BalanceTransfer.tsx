@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+// import React, { Component } from "react";
 
-type BTProps = {
+// type BTProps = {
 
-}
+// }
 
-type BTState = {
+// type BTState = {
 
-}
+// }
 
-export class BalanceTransfer extends Component<BTProps, BTState> {
+// export class BalanceTransfer extends Component<BTProps, BTState> {
     
-}
+// }

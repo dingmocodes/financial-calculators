@@ -1,17 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { createRoot, Root } from 'react-dom/client';
+import { CalcApp } from './CalcApp';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// Find the element where the app will be rendered.
+const main: HTMLElement | null = document.getElementById('main');
+if (main === null)
+  throw new Error("HTML is missing 'main' element")
+
+// Render the app in that element.
+const root: Root = createRoot(main);
+root.render(<CalcApp/>);
