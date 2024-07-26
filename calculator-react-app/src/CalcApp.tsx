@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Repayment } from './Repayment';
-// import { BalanceTransfer } from './BalanceTransfer'
-// import './Main.css';
+import { BalanceTransfer } from './BalanceTransfer'
 
 type Page = {kind: "home"} | {kind: "repayment"} | {kind: "bt"};
 
@@ -18,22 +17,32 @@ export class CalcApp extends Component<{}, CalcAppState> {
 
   render = (): JSX.Element => {
     if (this.state.page.kind === "home") {
-      return (<div>
-                <h1>Calculators</h1>
-                <button onClick={this.doRepaymentClick}>Repayment</button>
-                <button onClick={this.doBTClick}>Balance transfer</button>
-              </div>);
+      return this.renderHome();
     }
     if (this.state.page.kind === "repayment") {
-      return <Repayment/>;
+      return (<div>
+                {this.renderHome()}
+                <Repayment/>
+              </div>);
     }
-    // if (this.state.page.kind === "bt") {
-    //   return <BalanceTransfer/>
-    // } 
+    if (this.state.page.kind === "bt") {
+      return (<div>
+                {this.renderHome()}
+                <BalanceTransfer/>
+              </div>);
+    } 
     else {
       return <div></div>;
     }
   };
+
+  renderHome = (): JSX.Element => {
+    return (<div>
+              <h1>Calculators</h1>
+              <button onClick={this.doRepaymentClick}>Repayment</button>
+              <button onClick={this.doBTClick}>Balance transfer</button>
+            </div>);
+  }
 
   doRepaymentClick = (): void => {
     this.setState({page: {kind: "repayment"}});

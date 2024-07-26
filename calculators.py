@@ -4,6 +4,7 @@ from decimal import Decimal
 min_percentage = Decimal(0.025)  # somewhere in the range of 0.01 - 0.04
 billing_cycle = Decimal(30)
 days_in_year = Decimal(365)  # could be 360
+loan_list = []
 
 def get_minpayment(balance) -> Decimal:
     result = Decimal(balance) * min_percentage
@@ -45,6 +46,8 @@ def calculate_repayment(balance, interest, payment) -> dict:
 def calculate_bt(balance: Decimal, interest: Decimal, payment: Decimal, 
                  transfer_fee: Decimal, intro_period: Decimal) -> dict:
 
+    interest *= Decimal(0.01)
+    transfer_fee *= Decimal(0.01)
     total_cost = 0
     day_counter = 0
     old_balance = balance
