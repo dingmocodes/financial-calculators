@@ -89,7 +89,7 @@ export class Repayment extends Component<RepaymentProps, RepaymentState> {
     const min_payment: number = Number((min_percentage * curr_balance).toFixed(2)) < 5 ? 5
                                 : Number((min_percentage * curr_balance).toFixed(2));
     if (curr_balance <= 0 || curr_balance >= 100000) {
-      return alert('Please enter a valid balance within the range £1 - £99,000');
+      return alert('Please enter a valid balance within the range £1 - £99,999');
     }
     if (curr_interest <= 0 || curr_interest >= 100) {
       return alert('Please enter a valid interest rate within the range 1% - 99%');

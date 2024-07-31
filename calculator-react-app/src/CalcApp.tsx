@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Repayment } from './Repayment';
 import { BalanceTransfer } from './BalanceTransfer'
+import App from './PaymentPlans'
 
-type Page = {kind: "home"} | {kind: "repayment"} | {kind: "bt"};
+type Page = {kind: "home"} | {kind: "repayment"} | {kind: "bt"} | {kind: "multi"};
 
 type CalcAppState = {
   page: Page
@@ -30,6 +31,12 @@ export class CalcApp extends Component<{}, CalcAppState> {
                 {this.renderHome()}
                 <BalanceTransfer/>
               </div>);
+    }
+    if (this.state.page.kind === "multi") {
+      return (<div>
+                {this.renderHome()}
+                <App/>
+              </div>);
     } 
     else {
       return <div></div>;
@@ -41,6 +48,7 @@ export class CalcApp extends Component<{}, CalcAppState> {
               <h1>Calculators</h1>
               <button onClick={this.doRepaymentClick}>Repayment</button>
               <button onClick={this.doBTClick}>Balance transfer</button>
+              <button onClick={this.doMultiClick}>Multiple debts payoff</button>
             </div>);
   }
 
@@ -50,5 +58,9 @@ export class CalcApp extends Component<{}, CalcAppState> {
 
   doBTClick = (): void => {
     this.setState({page: {kind: "bt"}});
+  };
+
+  doMultiClick = (): void => {
+    this.setState({page: {kind: "multi"}});
   };
 }

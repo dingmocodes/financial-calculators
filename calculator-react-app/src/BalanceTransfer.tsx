@@ -102,7 +102,7 @@ export class BalanceTransfer extends Component<BTProps, BTState> {
     const curr_tf: number = this.state.transfer_fee;
     const curr_ip: number = this.state.intro_period;
     if (curr_balance <= 0 || curr_balance >= 100000) {
-      return alert('Please enter a valid balance within the range £1 - £99,000');
+      return alert('Please enter a valid balance within the range £1 - £99,999');
     }
     if (curr_interest <= 0 || curr_interest >= 100) {
       return alert('Please enter a valid interest rate within the range 1% - 99%');
