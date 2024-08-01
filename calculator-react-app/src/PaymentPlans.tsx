@@ -16,8 +16,14 @@ function App() {
 
   // when plan = true then snowball, otherwise avalanche
   const [plan, setPlan] = useState(true);
-
   const [mnthly_pay, setPay] = useState(0);
+  const [oldInput, setOldInput] = useState<InputField[]>([]);
+  const [output, setOutput] = useState<InputField[]>([]);
+  const [totalCost, setCost] = useState(0);
+  const [totalInterest, setInterest] = useState(0);
+  const [totalMonths, setMonths] = useState(0);
+
+
 
   const handleChangeInput = (index: number, event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -46,8 +52,27 @@ function App() {
     setInputField(data)
   }
 
+  const getTotalAttr = (attr: string): number => {
+    let total: number = 0;
+    const input: InputField[] = oldInput
+    const result: InputField[] = output
+    for (let i = 0; i < input.length; i++) {
+      if (attr === "cost") {
+        total += Number(result[i].total_cost);
+      }
+      if (attr === "interest") {
+        total += (Number(result[i].total_cost) - Number(input[i].balance));
+      }
+      if (attr === "months") {
+        total = Math.max(Number(result[i].total_months), total);
+      }
+    }
+    return total;
+  }
+
   const submit = () => {
     // would want a way to prevent users from refreshing page
+    setOldInput([...inputFields]);
     const args = {
       data: inputFields,
       plan: plan,
@@ -74,17 +99,20 @@ function App() {
   };
 
   const doSubmitJson = (data: unknown): void => {
-    if (!isRecord(data)) {
-      console.error("bad data from /payment-plan: not a record", data);
-      return;
-    }
-
     if (!Array.isArray(data)) {
       console.error("bad data from /payment-plan: not a list", data);
       return;
     }
 
-    console.log(data)
+    if (data.length === 0 || !isRecord(data[0])) {
+      console.error("bad data from /payment-plan: array is empty or first element is not a record", data);
+      return;
+    }
+
+    setOutput(data);
+    setCost(getTotalAttr("cost"));
+    setInterest(getTotalAttr("interest"));
+    setMonths(getTotalAttr("months"));
   };
 
   const doSubmitError = (msg: string): void => {
@@ -134,7 +162,10 @@ function App() {
         placeholder="Enter monthly payment"
         value={mnthly_pay}
         onChange={e => handlePayChangeInput(e)}>
-        </input>
+      </input>
+      <h3>Total cost: £ {totalCost}</h3>
+      <h3>Interest paid: £ {totalInterest}</h3>
+      <h3>Total months: {totalMonths}</h3>
     </div>
   );
 }
