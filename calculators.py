@@ -1,5 +1,4 @@
 from decimal import Decimal
-import json
 
 # assumptions:
 min_percentage = Decimal(0.025)  # somewhere in the range of 0.01 - 0.04
@@ -21,6 +20,7 @@ def calculate_repayment(balance, interest, payment) -> dict:
     day_counter = 0
     old_balance = balance
     dpr = interest / days_in_year  # daily periodic rate
+    mpr = interest / 12
 
     while balance > 0:
         day_counter += 1
@@ -34,6 +34,17 @@ def calculate_repayment(balance, interest, payment) -> dict:
                 total_cost += payment
             balance -= payment
             total_months += 1
+
+    # while balance > 0:
+    #     balance *= (1 + mpr)
+    #     if payment > balance:
+    #         total_cost += balance
+    #     else:
+    #         total_cost += payment
+    #     balance -= payment
+    #     total_months += 1
+
+
 
     response = {
         'total_interest_paid' : Decimal(round(total_cost - old_balance, 2)),
@@ -65,8 +76,10 @@ def calculate_bt(balance: Decimal, interest: Decimal, payment: Decimal,
                 total_cost += payment
             balance -= payment
 
-    return {'savings' : Decimal(round((total_cost - old_balance) - 
-                                      (old_balance * transfer_fee), 2))}
+    transfer_cost = old_balance * transfer_fee
+
+    return {'savings' : Decimal(round((total_cost - old_balance) - transfer_cost, 2)),
+            'monthly_payment' : Decimal(round((old_balance + transfer_cost) / 12, 2))}
 
 def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -> dict:
     paid_debts = 0
@@ -84,6 +97,7 @@ def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -
 
     # loop until we haven't paid all our debts
     while paid_debts < len(sorted_debts):
+        # print('we have paid ' + str(paid_debts) + ' debts')
 
         monthly_payment = round(payment, 2)
         day_counter += 1
@@ -94,6 +108,7 @@ def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -
 
             # handle payment
             if debt.balance > 0:
+                print('this debt ' + str(i) + ' still has ' + str(debt.balance) + ' left')
 
                 # tack on daily interest
                 interest = debt.interest * Decimal(0.01)
@@ -107,7 +122,7 @@ def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -
                     if i == (debts_left - 1):
                         payment_amount = monthly_payment
                         # since we're paying off last debt of cycle, reset the counter
-                        day_counter = 0
+                        # day_counter = 0
                     else:
                         payment_amount = debt.min_payment
                         
@@ -119,7 +134,7 @@ def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -
                     debt.total_months += 1
 
             # check if debt is paid off
-            if debt.balance <= 0:
+            if debt.balance <= 0 and debt.total_months > 0:
                 debts_left -= 1
                 paid_debts += 1
                 if isSnowball:  # sorting debts greatest balance to smallest
@@ -127,4 +142,8 @@ def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -
                 else:  # sorting debts smallest interest to greatest
                     sorted_debts = sorted(debt_list, key=lambda x: x.interest)
 
+        if day_counter == billing_cycle:
+            day_counter = 0
+    
+    print('finna return something')
     return [debt.dict() for debt in sorted_debts]

@@ -9,7 +9,7 @@ type CalcAppState = {
   page: Page
 };
 
-export class CalcApp extends Component<{}, CalcAppState> {
+export default class CalcApp extends Component<{}, CalcAppState> {
 
   constructor(props: {}) {
     super(props);

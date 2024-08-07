@@ -9,7 +9,8 @@ type BTState = {
   payment: number,
   transfer_fee: number,
   intro_period: number,
-  output: number
+  savings: number,
+  monthly_payment: number
 }
 
 export class BalanceTransfer extends Component<BTProps, BTState> {
@@ -22,7 +23,8 @@ export class BalanceTransfer extends Component<BTProps, BTState> {
       payment: 0,
       transfer_fee: 0,
       intro_period: 0,
-      output: 0
+      savings: 0,
+      monthly_payment: 0
     }
   }
 
@@ -67,7 +69,8 @@ export class BalanceTransfer extends Component<BTProps, BTState> {
         <button className="submitInput" type="button" onClick={this.doSubmitClick}>
           Submit
         </button>
-        <h3>Total savings: £ {this.state.output}</h3>
+        <h3>Total savings: £ {this.state.savings}</h3>
+        <h3>Monthly payment: £ {this.state.monthly_payment}</h3>
       </div>
     );
   };
@@ -150,13 +153,14 @@ export class BalanceTransfer extends Component<BTProps, BTState> {
     }
 
     const totalSavings = Number(data.savings);
+    const payments = Number(data.monthly_payment)
 
-    if (isNaN(totalSavings)) {
+    if (isNaN(totalSavings) || isNaN(payments)) {
       console.error("bad data from /balance-transfer: not a valid number", data);
       return;
     }
 
-    this.setState({output: totalSavings});
+    this.setState({savings: totalSavings, monthly_payment: payments});
   };
 
   doSubmitError = (msg: string): void => {

@@ -77,6 +77,7 @@ class BalanceTransferInput(BaseModel):
 
 class BalanceTransferOutput(BaseModel):
     savings: Decimal
+    monthly_payment: Decimal
 
 class Debt(BaseModel):
     total_cost: Decimal
