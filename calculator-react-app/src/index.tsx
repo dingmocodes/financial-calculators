@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
-import { CalcApp } from './CalcApp';
+import CalcApp from './CalcApp';
 
 
 // Find the element where the app will be rendered.
