@@ -11,8 +11,14 @@
     "next": "^14.2.5"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@types/node": "22.1.0",
     "file-loader": "^6.2.0",
     "typescript": "5.5.4"
+=======
+    "@types/node": "^22.1.0",
+    "@types/react": "^18.3.3",
+    "typescript": "^5.5.4"
+>>>>>>> 10001eb641831c75168b56c40393be4f84b5ae29
   }
 }
