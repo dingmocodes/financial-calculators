@@ -1,5 +1,9 @@
 import type { Metadata } from 'next'
 import '../index.css'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import theme from '../theme';
  
 export const metadata: Metadata = {
   title: 'React App',
@@ -20,8 +24,13 @@ export default function RootLayout({
         <title>React App</title>
       </head>
       <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root">{children}</div>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+            <div id="root">{children}</div>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   )

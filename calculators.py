@@ -14,6 +14,13 @@ def get_minpayment(balance) -> Decimal:
 
 def calculate_repayment(balance, interest, payment) -> dict:
 
+    if (balance == payment):
+        return {
+            'total_interest_paid' : 0,
+            'total_cost' : balance,
+            'total_months' : 1
+        }
+
     interest *= Decimal(0.01)
     total_cost = 0
     total_months = 0
@@ -34,17 +41,6 @@ def calculate_repayment(balance, interest, payment) -> dict:
                 total_cost += payment
             balance -= payment
             total_months += 1
-
-    # while balance > 0:
-    #     balance *= (1 + mpr)
-    #     if payment > balance:
-    #         total_cost += balance
-    #     else:
-    #         total_cost += payment
-    #     balance -= payment
-    #     total_months += 1
-
-
 
     response = {
         'total_interest_paid' : Decimal(round(total_cost - old_balance, 2)),

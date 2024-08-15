@@ -5,6 +5,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/cache": "^11.13.1",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material-nextjs": "^5.16.6",
     "next": "^14.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.1.0",
+    "file-loader": "^6.2.0",
+    "typescript": "5.5.4"
   }
 }
