@@ -1,6 +1,6 @@
 import React, { Component, ChangeEvent, MouseEvent } from "react";
 import { isRecord } from './record';
-import { TextField, Typography, InputAdornment, Box, Paper, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup, Button, Slide } from "@mui/material"
+import { TextField, Typography, InputAdornment, Box, Paper, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup, Button, Slide, Grid } from "@mui/material"
 
 type RepaymentProps = {}
 
@@ -52,16 +52,16 @@ export class Repayment extends Component<RepaymentProps, RepaymentState> {
 
   render = (): JSX.Element => {
     return (<Box>
-              <Box sx={{ px: 16, py: 8, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <Typography sx={{ fontSize: '4rem', fontFamily: 'NaNJaune-MidiBold', marginBottom: -5 }}>
-                  CREDIT CARD
+              <Box sx={{ px: '5rem', py: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 'auto', whiteSpace: 'nowrap', width: '100%' }}>
+                <Typography variant='h1' sx={{ fontFamily: 'NaNJaune-MidiBold', fontSize: 'clamp(1.5rem, 4vw, 3rem)' }}>
+                  CREDIT CARD 
                 </Typography>
-                <Typography sx={{ fontSize: '4rem', fontFamily: 'NaNJaune-MidiBold' }}>
+                <Typography variant='h1' sx={{ fontFamily: 'NaNJaune-MidiBold', fontSize: 'clamp(1.5rem, 4vw, 3rem)' }}>
                   REPAYMENT CALCULATOR
                 </Typography>
               </Box>
-              <Box sx={{px: 16, py: 8, height: '37.5rem', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                <Paper variant='outlined' sx={{ px: 5, py: 5, width: '25.8rem', display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: 'secondary.light', borderRadius: 5}}>
+              <Box sx={{ px: {xs: '2.5rem', sm: '2.5rem', md: '5rem'}, py: '2.5rem', height: {xs: '42.5rem', sm: '37.5rem'}, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                <Paper variant='outlined' sx={{mr: '1rem', px: '1.5rem', py: '1.5rem', width: '25.8rem', display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: 'secondary.light', borderRadius: 5}}>
                   <Box sx={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
                     Enter Balance
                     <TextField
@@ -116,23 +116,23 @@ export class Repayment extends Component<RepaymentProps, RepaymentState> {
                   </Box>
                 </Paper>
 
-                <Box sx={{width: '21.875rem', height: '100%', position: 'relative'}}>
-                  <Box sx={{position: 'absolute', width: '100%', height: '100%'}} ref={this.containerRef}>
-                    <Slide in={this.state.checked} container={this.containerRef.current} direction='up'>
-                      <Box sx={{px: 2, py: 2, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', color: 'primary.contrastText' ,height: (100 - ((this.state.output.total_interest_paid / this.state.output.total_cost) * 100)) + '%', backgroundColor: 'secondary.main'}}>
-                      <Typography sx={{ alignSelf: 'flex-start' }}>
-                        £{this.state.output.total_cost} Total Paid
-                      </Typography>
-                      <Typography sx={{ alignSelf: 'flex-start' }}>
-                        £{this.state.output.total_interest_paid} Interest Paid
-                      </Typography>
-                      </Box>
-                    </Slide>
-                    <Slide in={this.state.checked} container={this.containerRef.current} direction='up'>
-                      <Box sx={{width: '100%', height: ((this.state.output.total_interest_paid / this.state.output.total_cost) * 100) + '%', backgroundColor: 'primary.light'}}></Box>
-                    </Slide>
+                  <Box sx={{width: '21.875rem', height: '100%', position: 'relative'}}>
+                    <Box sx={{position: 'absolute', width: '100%', height: '100%'}} ref={this.containerRef}>
+                      <Slide in={this.state.checked} container={this.containerRef.current} direction='up'>
+                        <Box sx={{px: 2, py: 2, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', color: 'primary.contrastText' ,height: (100 - ((this.state.output.total_interest_paid / this.state.output.total_cost) * 100)) + '%', backgroundColor: 'secondary.main'}}>
+                        <Typography sx={{ alignSelf: 'flex-start' }}>
+                          £{this.state.output.total_cost} Total Paid
+                        </Typography>
+                        <Typography sx={{ alignSelf: 'flex-start' }}>
+                          £{this.state.output.total_interest_paid} Interest Paid
+                        </Typography>
+                        </Box>
+                      </Slide>
+                      <Slide in={this.state.checked} container={this.containerRef.current} direction='up'>
+                        <Box sx={{width: '100%', height: ((this.state.output.total_interest_paid / this.state.output.total_cost) * 100) + '%', backgroundColor: 'primary.light'}}></Box>
+                      </Slide>
+                    </Box>
                   </Box>
-                </Box>
               </Box>
             </Box>);
   };

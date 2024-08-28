@@ -25,6 +25,7 @@ export default class CalcApp extends Component<{}, CalcAppState> {
       return (<div>
                 {this.renderHome()}
                 <Repayment/>
+                {this.renderTerms()}
               </div>);
     }
     if (this.state.page.kind === "Balance Transfer Calculator") {
@@ -45,16 +46,6 @@ export default class CalcApp extends Component<{}, CalcAppState> {
   };
 
   renderHome = (): JSX.Element => {
-    // const Item = styled(Paper)(({ theme }) => ({
-    //   backgroundColor: theme.palette.primary.dark,
-    //   //padding: theme.spacing(1),
-    //   textAlign: 'center',
-    //   color: theme.palette.primary.contrastText,
-    //   cursor: 'pointer',
-    //   height: 30,
-    //   borderRadius: '15px',
-    //   boxShadow: theme.shadows[5],
-    // }));
 
     const printCalcTypes = (type: string, pageState: string): JSX.Element => {
       let weight: number = 0;
@@ -67,26 +58,27 @@ export default class CalcApp extends Component<{}, CalcAppState> {
         textColor = 'secondary.contrastText'
       }
       return (
-        <Typography variant='body1' sx={{ fontWeight: weight, color: textColor}}>
+        <Typography variant='body1' sx={{ fontWeight: weight, color: textColor }}>
           { type }
         </Typography>
       );
     };
 
     return (
-            <Box sx={{ flexGrow: 1, fontFamily: 'Satoshi-Variable'}}>
-              <Grid container spacing ={0} sx={{ px: 16, py: 8, height: 122, fontSize: '1rem' }} direction="row" justifyContent="flex-start" alignItems="flex-start">
-                  <Grid item xs={10} md={2.5}>
+            // <Box sx={{ flexGrow: 1, fontFamily: 'Satoshi-Variable', height: '7.625rem' }}>
+            <Box sx={{ flexGrow: 1, fontFamily: 'Satoshi-Variable', height: 'auto' }}>
+              <Grid container spacing ={2} sx={{ px: '5rem', py: '2.5rem', whiteSpace: { xs: 'nowrap', sm: 'normal', md: 'normal' } }} direction="row" justifyContent="flex-start" alignItems="flex-start">
+                  <Grid item xs={12} sm={4} md={2.5}>
                       <Button variant='text' disableRipple onClick={this.doRepaymentClick} sx={{ textTransform: 'none' }}>
                         { printCalcTypes('Credit Card Repayment Calculator', this.state.page.kind) }
                       </Button>
                   </Grid>
-                  <Grid item xs={10} md={2.5}>
+                  <Grid item xs={12} sm={4} md={2.5}>
                     <Button variant='text' disableRipple onClick={this.doBTClick} sx={{ textTransform: 'none' }}>
                       { printCalcTypes('Balance Transfer Calculator', this.state.page.kind) }
                     </Button>
                   </Grid>
-                  <Grid item xs={10} md={2.5}>
+                  <Grid item xs={12} sm={4} md={2.5}>
                     <Button variant='text' disableRipple onClick={this.doMultiClick} sx={{ textTransform: 'none' }}>
                       { printCalcTypes('Debt Snowball/Avalanche', this.state.page.kind) }
                     </Button>
@@ -94,6 +86,39 @@ export default class CalcApp extends Component<{}, CalcAppState> {
               </Grid>
             </Box>
           );
+  }
+
+  renderTerms = (): JSX.Element => {
+
+    const printTerms = (num: number, term: string, def: string): JSX.Element => {
+      return (
+              <Paper variant='outlined' sx={{px: '1.563rem', py: '1.563rem', width: '25rem', height: 'auto', borderRadius: '10px'}}>
+                <Grid container spacing={0}>
+                  <Grid item xs={2.5}>
+                    <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'primary.main', color: '#fff', borderRadius: '50%', width: '3.25rem', height: '3.25rem', fontSize: '1.5rem', fontWeight: 700}}>
+                      {num}
+                    </Box>
+                  </Grid>
+                  <Grid item xs={9.5} sx={{display: 'flex', flexDirection: 'column'}}>
+                    <Typography sx={{pb: '0.75rem',fontSize: '1.5rem', fontWeight: 700}}>
+                      {term}
+                    </Typography>
+                    <Typography sx={{fontSize: '0.875rem'}}>
+                      {def}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Paper>
+             );
+    }
+
+    return (
+            <Box sx={{ px: 16, py: 8}}>
+              <Typography sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '3rem', fontFamily: 'NaNJaune-MidiBold', marginBottom: -3}}>ALL TERMS</Typography>
+              <Typography sx={{pb: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '3rem', fontFamily: 'NaNJaune-MidiBold'}}>YOU NEED TO KNOW</Typography>
+              {printTerms(1, 'Credit Card Balance', 'This is the total dollar amount you owe to a credit card company. You might have multiple different balances if you have multiple credit cards')}
+            </Box>
+           );
   }
 
   doRepaymentClick = (): void => {

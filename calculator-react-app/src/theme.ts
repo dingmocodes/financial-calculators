@@ -4,7 +4,7 @@ import NaNJauneMidiBold from '../public/fonts/NaNJaune-MidiBold.ttf';
 import SatoshiVariable from '../public/fonts/Satoshi-Variable.ttf';
 
 
-const theme = createTheme({
+let theme = createTheme({
   palette: {
     primary: {
       main: '#142a31', // dark blue-green
@@ -22,6 +22,8 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: 'Satoshi-Variable, NaNJaune-MidiBold, Arial',
+    htmlFontSize: 16,
+    h1: {fontSize: '4rem'}
   },
   components: {
     MuiCssBaseline: {
@@ -49,4 +51,6 @@ const theme = createTheme({
   spacing: 5,
 });
 
-export default responsiveFontSizes(theme);
+theme = responsiveFontSizes(theme)
+
+export default theme;
