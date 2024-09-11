@@ -74,6 +74,7 @@ def calculate_bt(balance: Decimal, interest: Decimal, payment: Decimal,
 
     transfer_cost = old_balance * transfer_fee
 
+    # savings is the total cost paying debt normally subtracted by the cost of paying debt after balance transfer
     return {'savings' : Decimal(round((total_cost - old_balance) - transfer_cost, 2)),
             'monthly_payment' : Decimal(round((old_balance + transfer_cost) / 12, 2))}
 
@@ -104,8 +105,7 @@ def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -
 
             # handle payment
             if debt.balance > 0:
-                print('this debt ' + str(i) + ' still has ' + str(debt.balance) + ' left')
-
+            
                 # tack on daily interest
                 interest = debt.interest * Decimal(0.01)
                 dpr = interest / days_in_year
@@ -141,5 +141,4 @@ def calculate_paymentplan(debt_list: list, isSnowball: bool, payment: Decimal) -
         if day_counter == billing_cycle:
             day_counter = 0
     
-    print('finna return something')
     return [debt.dict() for debt in sorted_debts]
